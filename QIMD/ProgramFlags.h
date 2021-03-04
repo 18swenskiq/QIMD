@@ -1,0 +1,4 @@
+#pragma once
+
+#define SERVER_MODE 0b00000001
+#define CLIENT_MODE 0b00000010
