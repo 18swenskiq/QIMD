@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="ProgramFlags.h" />
     <ClInclude Include="QIMD.h" />
+    <ClInclude Include="qimd_server.h" />
     <ClInclude Include="xsocket_init.hpp" />
     <ClInclude Include="xsocket_endpoint.h" />
     <ClInclude Include="xsocket_include.h" />
