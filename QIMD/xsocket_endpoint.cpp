@@ -43,7 +43,7 @@ namespace net {
 
 		int i = getaddrinfo(host, service, &hints, &res);
 		if (i != 0) {
-			//std::cout << gai_strerror( i ) << std::endl;
+			std::cout << gai_strerror( i ) << std::endl;
 			return std::vector<endpoint>();
 		}
 

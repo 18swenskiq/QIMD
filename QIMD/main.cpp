@@ -55,6 +55,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    net::init();
+
     net::socket sock(net::af::inet6, net::sock::dgram, port);
     if (!sock.good())
     {
