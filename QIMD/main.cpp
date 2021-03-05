@@ -1,15 +1,25 @@
 #include <iostream>
 #include "ProgramFlags.h"
-#include "xsocket.hpp"
+
+#include "xsocket_init.hpp"
+#include "xsocket_socket.h"
+
+// Quinton's In-Memory Database is just as the name suggests, an in-memory database.
+// This project was made as a senior project to build a large portfolio piece.
+// This project uses a very modified version of the xsocket library by wpbirney (https://github.com/wpbirney/xsocket)
+// Github repo for this project is at https://github.com/18swenskiq/QIMD
 
 void printHelp();
 
 int main(int argc, char *argv[])
 {
+
     std::cout << "Quinton's In-Memory Database" << std::endl;
     
+    int port = 61270; // Default port
+
     // Get our command line parameters and store in flags
-    char flags = 0;
+    char user_flags = 0;
     for (int i = 1; i < argc; i++)
     {
         if (strcmp(argv[i], "-help") == 0)
@@ -20,31 +30,54 @@ int main(int argc, char *argv[])
 
         if (strcmp(argv[i], "-s") == 0)
         {
-            flags = (flags | SERVER_MODE);
+            user_flags = (user_flags | SERVER_MODE);
             continue;
         }
 
         if (strcmp(argv[i], "-c") == 0)
         {
-            flags = (flags | CLIENT_MODE);
+            user_flags = (user_flags | CLIENT_MODE);
             continue;
         }
     }
 
-    if (flags == 0)
+    // Print help statement and exit if no arguments
+    if (user_flags == 0)
     {
         printHelp();
         return 0;
     }
 
-    net::socket sock(net::af::inet6, net::sock::dgram, 61270);
+    // Exit if server and client are defined
+    if ((user_flags & SERVER_MODE) && (user_flags & CLIENT_MODE))
+    {
+        std::cout << "Error: Server and Client mode cannot both be defined!!! Please define only one. Exiting..." << std::endl;
+        return 1;
+    }
+
+    net::socket sock(net::af::inet6, net::sock::dgram, port);
     if (!sock.good())
     {
         std::cerr << "error creating socket" << std::endl;
         return -1;
     }
     
-    sock.listen()
+    sock.listen(5);
+
+    std::cout << "listening on port: " << sock.getlocaladdr().get_port() << std::endl;
+
+    net::socket client;
+    net::endpoint remoteAddr;
+
+    while (true) {
+        client = sock.accept(&remoteAddr);
+
+        if (client.good()) {
+            std::string msg = remoteAddr.get_ip();
+            client.send(&msg);
+            client.close();
+        }
+    }
 }
 
 void printHelp()

@@ -21,12 +21,30 @@
     <ClCompile Include="QIMD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="xsocket_endpoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xsocket_socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QIMD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ProgramFlags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xsocket_endpoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xsocket_socket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xsocket_include.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xsocket_init.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
