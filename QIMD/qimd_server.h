@@ -1,5 +1,5 @@
 #pragma once
-#include "xsocket_socket.h"
+#include "winsocket_init.h"
 
 class qimd_server {
 public:
@@ -8,8 +8,5 @@ public:
 	bool isCreateSockFailed;
 
 private:
-	net::socket* sock;
-	net::socket client;
-	net::endpoint remoteAddr;
 	int connectPort;
 };

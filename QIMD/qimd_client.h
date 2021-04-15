@@ -1,7 +1,7 @@
 #pragma once
 #include <thread>
 #include <chrono>
-#include "xsocket_socket.h"
+#include "winsocket_init.h"
 
 class qimd_client {
 public:
@@ -10,8 +10,5 @@ public:
 	bool isCreateSockFailed;
 
 private:
-	net::socket* sock;
-	net::socket client;
-	net::endpoint remoteAddr;
 	int connectPort;
 };

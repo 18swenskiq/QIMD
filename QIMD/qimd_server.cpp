@@ -3,7 +3,6 @@
 qimd_server::qimd_server(int port)
 {
     connectPort = port;
-    sock = nullptr;
     isCreateSockFailed = false;
 }
 
@@ -106,27 +105,4 @@ int qimd_server::launch_server()
     closesocket(ClientSocket);
     WSACleanup();
     return 0;
-
-    
-
-    //sock = new net::socket(net::af::inet6, net::sock::dgram, connectPort);
-    //if (!sock->good())
-    //{
-        //std::cerr << "error creating socket. error: " << sock->geterror() << std::endl;
-        //isCreateSockFailed = true;
-        //return;
-    //}
-
-    //sock->listen(5);
-    //std::cout << "Server listening on port: " << sock->getlocaladdr().get_port() << std::endl;
-
-    //while (true) {
-        //client = sock->accept(&remoteAddr);
-
-        //if (client.good()) {
-            //std::string msg = remoteAddr.get_ip();
-            //client.send(&msg);
-            //client.close();
-        //}
-    //}
 }

@@ -3,7 +3,6 @@
 qimd_client::qimd_client(int port)
 {
     connectPort = port;
-    sock = nullptr;
     isCreateSockFailed = false;
 }
 

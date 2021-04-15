@@ -7,7 +7,6 @@
 
 // Quinton's In-Memory Database is just as the name suggests, an in-memory database.
 // This project was made as a senior project to build a large portfolio piece.
-// This project uses a very modified version of the xsocket library by wpbirney (https://github.com/wpbirney/xsocket)
 // Github repo for this project is at https://github.com/18swenskiq/QIMD
 
 void printHelp();
