@@ -1,8 +1,8 @@
 #include <iostream>
 #include "ProgramFlags.h"
 
-#include "xsocket_init.hpp"
-#include "xsocket_socket.h"
+#include "qimd_client.h"
+#include "qimd_server.h"
 
 // Quinton's In-Memory Database is just as the name suggests, an in-memory database.
 // This project was made as a senior project to build a large portfolio piece.
@@ -54,31 +54,29 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    net::init();
-
-    net::socket sock(net::af::inet6, net::sock::dgram, port);
-    if (!sock.good())
+    if (user_flags & SERVER_MODE)
     {
-        std::cerr << "error creating socket" << std::endl;
-        return -1;
-    }
-    
-    sock.listen(5);
-
-    std::cout << "listening on port: " << sock.getlocaladdr().get_port() << std::endl;
-
-    net::socket client;
-    net::endpoint remoteAddr;
-
-    while (true) {
-        client = sock.accept(&remoteAddr);
-
-        if (client.good()) {
-            std::string msg = remoteAddr.get_ip();
-            client.send(&msg);
-            client.close();
+        qimd_server* qimds = new qimd_server(port);
+        if (qimds->isCreateSockFailed)
+        {
+            std::cout << "Error: Server socket creation failed." << std::endl;
+            return 1;
         }
+        qimds->launch_server();
     }
+
+    if (user_flags & CLIENT_MODE)
+    {
+        qimd_client* qimdc = new qimd_client(port);
+        if (qimdc->isCreateSockFailed)
+        {
+            std::cout << "Error: Server socket creation failed." << std::endl;
+            return 1;
+        }
+        qimdc->launch_client();
+    }
+
+    return 0;
 }
 
 void printHelp()

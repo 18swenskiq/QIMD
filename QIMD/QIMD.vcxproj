@@ -153,7 +153,6 @@
     <ClInclude Include="qimd_client.h" />
     <ClInclude Include="qimd_server.h" />
     <ClInclude Include="winsocket_init.h" />
-    <ClInclude Include="xsocket_include.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
