@@ -64,7 +64,7 @@ int qimd_client::launch_client()
     const char* sendbuf = "this is a test";
     char recvbuf[512];
 
-    std::cout << "Sending data..." << std::endl;
+    std::cout << "Sending start data..." << std::endl;
     iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
     if (iResult == SOCKET_ERROR) {
         std::cout << "Send failed: " << WSAGetLastError() << std::endl;
@@ -72,8 +72,35 @@ int qimd_client::launch_client()
         WSACleanup();
         return 1;
     }
-
     std::cout << "Bytes sent: " << iResult << std::endl;
+
+    ParseInput* parser = new ParseInput();
+
+    while (true) {
+        std::string userinput;
+        std::cout << ">";
+        std::cin >> userinput;
+        std::cout << "User input: " << userinput << std::endl;
+        Instructions::Instruction instr_in = parser->GetInstruction(userinput);
+        if (instr_in == Instructions::Instruction::UNRECOGNIZED)
+        {
+            std::cout << "Instruction was unrecognized! Please enter a valid instruction!" << std::endl;
+            continue;
+        }
+        if (instr_in == Instructions::Instruction::SHUTDOWN)
+        {
+            break;
+        }
+        if (instr_in == Instructions::Instruction::EXIT)
+        {
+            closesocket(ConnectSocket);
+            WSACleanup();
+            return 0;
+        }
+
+
+    }
+
     std::cout << "Shutting down..." << std::endl;
     iResult = shutdown(ConnectSocket, SD_SEND);
     if (iResult == SOCKET_ERROR) {

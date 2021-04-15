@@ -2,6 +2,7 @@
 #include <thread>
 #include <chrono>
 #include "winsocket_init.h"
+#include "ParseInput.h"
 
 class qimd_client {
 public:

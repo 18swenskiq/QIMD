@@ -144,11 +144,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ParseInput.cpp" />
     <ClCompile Include="qimd_client.cpp" />
     <ClCompile Include="qimd_server.cpp" />
     <ClCompile Include="winsocket_init.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Instructions.h" />
+    <ClInclude Include="ParseInput.h" />
     <ClInclude Include="ProgramFlags.h" />
     <ClInclude Include="qimd_client.h" />
     <ClInclude Include="qimd_server.h" />
