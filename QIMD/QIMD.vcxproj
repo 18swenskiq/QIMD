@@ -144,15 +144,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="qimd_client.cpp" />
-    <ClCompile Include="qimd_server.cpp" />
+    <ClCompile Include="QIMD.cpp" />
     <ClCompile Include="xsocket_endpoint.cpp" />
-    <ClCompile Include="xsocket_init.cpp" />
     <ClCompile Include="xsocket_socket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProgramFlags.h" />
-    <ClInclude Include="qimd_client.h" />
+    <ClInclude Include="QIMD.h" />
     <ClInclude Include="qimd_server.h" />
     <ClInclude Include="xsocket_init.hpp" />
     <ClInclude Include="xsocket_endpoint.h" />

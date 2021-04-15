@@ -1,5 +1,4 @@
 #pragma once
-#include "xsocket_init.hpp"
 #include "xsocket_include.h"
 #include "xsocket_endpoint.h"
 
