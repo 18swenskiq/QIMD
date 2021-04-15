@@ -22,16 +22,9 @@ THE SOFTWARE.
 
 
 //cross platform includes
+#pragma once
 #include "xsocket_include.h"
 
 namespace net {
-
-	inline void init() {
-		//no-op on *nix
-		if (!_wsaInitDone) {
-			WSAStartup(MAKEWORD(2, 2), &_wsaData);
-			_wsaInitDone = true;
-		}
-
-	}
+	void init();
 }
