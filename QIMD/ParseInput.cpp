@@ -1,30 +1,31 @@
 #include "ParseInput.h"
+#include <iostream>
 
 Instructions::Instruction ParseInput::GetInstruction(std::string input) {
 	std::string token = input.substr(0, input.find(" "));
 
-	std::transform(input.begin(), input.end(), input.begin(), ::toupper);
-	if (input == "NEWTABLE")
+	std::transform(token.begin(), token.end(), token.begin(), ::toupper);
+	if (token == "NEWTABLE")
 	{
 		return Instructions::Instruction::NEWTABLE;
 	}
-	else if (input == "GETVALUE")
+	else if (token == "GETVALUE")
 	{
 		return Instructions::Instruction::GETVALUE;
 	}
-	else if (input == "SETVALUE")
+	else if (token == "SETVALUE")
 	{
 		return Instructions::Instruction::SETVALUE;
 	}
-	else if (input == "SWITCHTABLE")
+	else if (token == "SWITCHTABLE")
 	{
 		return Instructions::Instruction::SWITCHTABLE;
 	}
-	else if (input == "EXIT")
+	else if (token == "EXIT")
 	{
 		return Instructions::Instruction::EXIT;
 	}
-	else if (input == "SHUTDOWN")
+	else if (token == "SHUTDOWN")
 	{
 		return Instructions::Instruction::SHUTDOWN;
 	}

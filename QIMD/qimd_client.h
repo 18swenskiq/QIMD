@@ -3,6 +3,7 @@
 #include <chrono>
 #include "winsocket_init.h"
 #include "ParseInput.h"
+#include "Packet.h"
 
 class qimd_client {
 public:
@@ -12,4 +13,5 @@ public:
 
 private:
 	int connectPort;
+	int send_packet(SOCKET ConnectSocket, Packet* packet);
 };

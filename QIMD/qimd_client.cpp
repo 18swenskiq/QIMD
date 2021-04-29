@@ -79,8 +79,11 @@ int qimd_client::launch_client()
     while (true) {
         std::string userinput;
         std::cout << ">";
-        std::cin >> userinput;
-        std::cout << "User input: " << userinput << std::endl;
+        // Get user input
+        //std::cin >> userinput;
+        std::getline(std::cin, userinput);
+        //std::cout << "User input: " << userinput << std::endl;
+        // Parse user input
         Instructions::Instruction instr_in = parser->GetInstruction(userinput);
         if (instr_in == Instructions::Instruction::UNRECOGNIZED)
         {
@@ -96,6 +99,33 @@ int qimd_client::launch_client()
             closesocket(ConnectSocket);
             WSACleanup();
             return 0;
+        }
+        else
+        {
+            // Split the string into a vector
+            std::vector<std::string> container;
+            std::istringstream iss(userinput);
+            std::copy(std::istream_iterator<std::string>(iss),
+                std::istream_iterator<std::string>(),
+                std::back_inserter(container));
+            std::string datapayload = "";
+
+            for (int i = 1; i < container.size(); i++)
+            {
+                datapayload.append(container[i]);
+                if ((i + 1) < container.size()) datapayload.append(" ");
+            }
+            if (sizeof(datapayload) > 500)
+            {
+                std::cout << "Given data was too big to send! Use less data" << std::endl;
+            }
+
+            Packet *sendpacket = new Packet(instr_in, datapayload);
+            int sendresult = send_packet(ConnectSocket, sendpacket);
+            if (sendresult == 1)
+            {
+                std::cout << "Error" << std::endl;
+            }
         }
 
 
@@ -135,4 +165,23 @@ int qimd_client::launch_client()
     closesocket(ConnectSocket);
     WSACleanup();
     return 0;
+}
+
+int qimd_client::send_packet(SOCKET ConnectSocket, Packet *packet)
+{
+    int iResult;
+    int recvbuflen = 512;
+    const void* sendbuf = packet;
+    char recvbuf[512];
+
+    std::cout << "Sending packet... Size: " << sizeof(packet) << std::endl;
+    iResult = send(ConnectSocket, (char*)packet, sizeof(packet), 0);
+    if (iResult == SOCKET_ERROR) {
+        std::cout << "Send failed: " << WSAGetLastError() << std::endl;
+        closesocket(ConnectSocket);
+        WSACleanup();
+        return 1;
+    }
+    std::cout << "Bytes sent: " << iResult << std::endl;
+    return iResult;
 }
