@@ -1,0 +1,3 @@
+- Serialize data (packet)
+- Deserialize data (packet)
+- Get and read data

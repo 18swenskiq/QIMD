@@ -1,4 +1,5 @@
 #include "qimd_server.h"
+#include "Packet.h"
 
 qimd_server::qimd_server(int port)
 {
@@ -73,6 +74,8 @@ int qimd_server::launch_server()
     do {
         iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0) {
+            Packet* recvpacket = new Packet(recvbuf);
+
             std::cout << "Bytes received: " << iResult << std::endl;
             iSendResult = send(ClientSocket, recvbuf, iResult, 0);
             if (iSendResult == SOCKET_ERROR) {

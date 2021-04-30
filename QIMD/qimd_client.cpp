@@ -60,30 +60,15 @@ int qimd_client::launch_client()
 
     std::cout << "Connection socket successfully built!" << std::endl;
 
-    int recvbuflen = 512;
-    const char* sendbuf = "this is a test";
-    char recvbuf[512];
-
-    std::cout << "Sending start data..." << std::endl;
-    iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
-    if (iResult == SOCKET_ERROR) {
-        std::cout << "Send failed: " << WSAGetLastError() << std::endl;
-        closesocket(ConnectSocket);
-        WSACleanup();
-        return 1;
-    }
-    std::cout << "Bytes sent: " << iResult << std::endl;
+    Packet* testpacket = new Packet(Instructions::Instruction::TESTPACKET, "test");
+    iResult = send_packet(ConnectSocket, testpacket);
 
     ParseInput* parser = new ParseInput();
 
     while (true) {
         std::string userinput;
         std::cout << ">";
-        // Get user input
-        //std::cin >> userinput;
         std::getline(std::cin, userinput);
-        //std::cout << "User input: " << userinput << std::endl;
-        // Parse user input
         Instructions::Instruction instr_in = parser->GetInstruction(userinput);
         if (instr_in == Instructions::Instruction::UNRECOGNIZED)
         {
@@ -140,6 +125,9 @@ int qimd_client::launch_client()
         return 1;
     }
 
+    int recvbuflen = 512;
+    char recvbuf[512];
+
     do {
         iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0) {
@@ -171,11 +159,11 @@ int qimd_client::send_packet(SOCKET ConnectSocket, Packet *packet)
 {
     int iResult;
     int recvbuflen = 512;
-    const void* sendbuf = packet;
+    const char* sendbuf = packet->Serialize();
     char recvbuf[512];
 
-    std::cout << "Sending packet... Size: " << sizeof(packet) << std::endl;
-    iResult = send(ConnectSocket, (char*)packet, sizeof(packet), 0);
+    std::cout << "Sending packet..." << std::endl;
+    iResult = send(ConnectSocket, sendbuf, 512, 0);
     if (iResult == SOCKET_ERROR) {
         std::cout << "Send failed: " << WSAGetLastError() << std::endl;
         closesocket(ConnectSocket);
