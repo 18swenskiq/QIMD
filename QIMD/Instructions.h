@@ -6,7 +6,8 @@ static class Instructions {
 public:
 	static enum class Instruction { NEWTABLE, GETVALUE, SETVALUE,
 									SWITCHTABLE, EXIT, SHUTDOWN, 
-									STARTPACKET, ENDPACKET, TESTPACKET, UNRECOGNIZED };
+									STARTPACKET, ENDPACKET, TESTPACKET,
+									SUCCESS, UNRECOGNIZED };
 	template <typename E>
 	static constexpr auto to_underlying(E e) noexcept
 	{

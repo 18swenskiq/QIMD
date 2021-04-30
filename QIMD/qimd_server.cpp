@@ -13,6 +13,7 @@ qimd_server::qimd_server(int port)
     connectPort = port;
     isCreateSockFailed = false;
     numtables = 0;
+    curtable = nullptr;
 }
 
 int qimd_server::launch_server()
@@ -39,30 +40,17 @@ int qimd_server::launch_server()
     ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
     if (ListenSocket == INVALID_SOCKET) {
         SOCKETERROREXIT("Error at socket() : ", WSAGetLastError(), result, ListenSocket);
-        //std::cout << "Error at socket() : " << WSAGetLastError() << std::endl;
-        //freeaddrinfo(result);
-        //WSACleanup();
-        //return 1;
     }
 
     std::cout << "Binding listen socket..." << std::endl;
     iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
     if (iResult == SOCKET_ERROR) {
         SOCKETERROREXIT("Bind failed with error: ", WSAGetLastError(), result, ListenSocket);
-        //std::cout << "Bind failed with error: " << WSAGetLastError() << std::endl;
-        //freeaddrinfo(result);
-        //closesocket(ListenSocket);
-        //WSACleanup();
-        //return 1;
     }
 
     std::cout << "Testing listen..." << std::endl;
     if (listen(ListenSocket, SOMAXCONN) == SOCKET_ERROR) {
         SOCKETERROREXIT("Listen failed with error: ", WSAGetLastError(), result, ListenSocket);
-        //std::cout << "Listen failed with error " << WSAGetLastError() << std::endl;
-        //closesocket(ListenSocket);
-        //WSACleanup();
-        //return 1;
     }
 
     SOCKET ClientSocket;
@@ -72,10 +60,6 @@ int qimd_server::launch_server()
     ClientSocket = accept(ListenSocket, NULL, NULL);
     if (ClientSocket == INVALID_SOCKET) {
         SOCKETERROREXIT("Accept failed: ", WSAGetLastError(), result, ListenSocket);
-        //std::cout << "Accept failed: " << WSAGetLastError() << std::endl;
-        //closesocket(ListenSocket);
-        //WSACleanup();
-        //return 1;
     }
 
     char recvbuf[512];
@@ -88,40 +72,33 @@ int qimd_server::launch_server()
         if (iResult > 0) {
             Packet* recvpacket = new Packet(recvbuf);
             int parseresult = parse_packet(recvpacket);
+            delete(recvpacket);
+            Packet* sendpacket;
             if (parseresult == 1)
             {
-                std::cout << "Malformed packet" << std::endl;
+                sendpacket = new Packet(Instructions::Instruction::UNRECOGNIZED, "Input was invalid or malformed");
             }
-            std::cout << "Bytes received: " << iResult << std::endl;
-            iSendResult = send(ClientSocket, recvbuf, iResult, 0);
+            else
+            {
+                sendpacket = new Packet(Instructions::Instruction::SUCCESS, "Good");
+            }
+
+            iSendResult = send(ClientSocket, sendpacket->Serialize(), iResult, 0);
             if (iSendResult == SOCKET_ERROR) {
                 SOCKETERROREXIT("Send failed: ", WSAGetLastError(), result, ListenSocket);
-                //std::cout << "Send failed: " << WSAGetLastError() << std::endl;
-                //closesocket(ClientSocket);
-                //WSACleanup();
-                //return 1;
             }
-            std::cout << "Bytes send: " << iSendResult << std::endl;
         }
         else if (iResult == 0) {
             std::cout << "Connection closing..." << std::endl;
         }
         else {
             SOCKETERROREXIT("Recv failed: ", WSAGetLastError(), result, ListenSocket);
-            //std::cout << "Recv failed: " << WSAGetLastError();
-            //closesocket(ClientSocket);
-            //WSACleanup();
-            //return 1;
         }
     } while (iResult > 0);
 
     iResult = shutdown(ClientSocket, SD_SEND);
     if (iResult == SOCKET_ERROR) {
         SOCKETERROREXIT("Shutdown failed: ", WSAGetLastError(), result, ListenSocket);
-        //std::cout << "Shutdown failed: " << WSAGetLastError() << std::endl;
-        //closesocket(ClientSocket);
-        //WSACleanup();
-        //return 1;
     }
 
     closesocket(ClientSocket);
@@ -148,6 +125,25 @@ int qimd_server::parse_packet(Packet* packet)
         tables.push_back(new QIMDTable(packet->Data));
         numtables++;
     }
+    else if (packet->InputInstruction == Instructions::Instruction::SWITCHTABLE)
+    {
+        int switchresult = switch_table(packet->Data);
+        if (switchresult == 1) return 1;
+    }
 
     return 0;
+}
+
+int qimd_server::switch_table(std::string datapayload)
+{
+    std::string cmpstring = Utils::SplitStringToVector(datapayload)[0];
+    for (int i = 0; i < numtables; i++)
+    {
+        if (cmpstring == tables[i]->Name)
+        {
+            curtable = tables[i];
+            return 0;
+        }
+    }
+    return 1;
 }

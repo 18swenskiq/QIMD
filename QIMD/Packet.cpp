@@ -15,22 +15,17 @@ Packet::Packet(char rawdata[])
 		(rawdata[2]) << 8 |
 		(rawdata[3])));
 
-	std::cout << "Begin: " << Instructions::to_underlying(Begin) << std::endl;
-
 	// Read main instruction (hopefully not malformed)
 	InputInstruction = static_cast<Instructions::Instruction>(int((rawdata[4]) << 24 |
 		(rawdata[5]) << 16 |
 		(rawdata[6]) << 8 |
 		(rawdata[7])));
 
-	std::cout << "Input: " << Instructions::to_underlying(InputInstruction) << std::endl;
-
 	Data = "";
 	for (int i = 0; i < 500; i++)
 	{
 		if (rawdata[i + 8] == '\0') break;
 		Data.push_back(rawdata[i + 8]);
-		std::cout << "Data at " << i << rawdata[i + 8] << std::endl;
 	}
 
 	End = static_cast<Instructions::Instruction>(int((rawdata[508]) << 24 |
