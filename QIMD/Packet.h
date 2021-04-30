@@ -9,7 +9,6 @@ public:
 public:
 	Instructions::Instruction InputInstruction;
 	std::string Data;	
-private:
 	Instructions::Instruction Begin;
 	Instructions::Instruction End;
 };

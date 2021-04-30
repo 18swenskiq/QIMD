@@ -88,11 +88,7 @@ int qimd_client::launch_client()
         else
         {
             // Split the string into a vector
-            std::vector<std::string> container;
-            std::istringstream iss(userinput);
-            std::copy(std::istream_iterator<std::string>(iss),
-                std::istream_iterator<std::string>(),
-                std::back_inserter(container));
+            std::vector<std::string> container = Utils::SplitStringToVector(userinput);
             std::string datapayload = "";
 
             for (int i = 1; i < container.size(); i++)
@@ -103,6 +99,7 @@ int qimd_client::launch_client()
             if (sizeof(datapayload) > 500)
             {
                 std::cout << "Given data was too big to send! Use less data" << std::endl;
+                continue;
             }
 
             Packet *sendpacket = new Packet(instr_in, datapayload);

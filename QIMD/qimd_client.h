@@ -4,6 +4,7 @@
 #include "winsocket_init.h"
 #include "ParseInput.h"
 #include "Packet.h"
+#include "Utils.h"
 
 class qimd_client {
 public:

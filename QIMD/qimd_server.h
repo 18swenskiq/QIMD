@@ -1,5 +1,7 @@
 #pragma once
 #include "winsocket_init.h"
+#include "Packet.h"
+#include "QIMDTable.h"
 
 class qimd_server {
 public:
@@ -8,5 +10,8 @@ public:
 	bool isCreateSockFailed;
 
 private:
+	std::vector<QIMDTable*> tables;
+	int numtables;
+	int parse_packet(Packet* packet);
 	int connectPort;
 };

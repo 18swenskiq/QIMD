@@ -150,8 +150,11 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="ParseInput.cpp" />
+    <ClCompile Include="QIMDColumn.cpp" />
+    <ClCompile Include="QIMDTable.cpp" />
     <ClCompile Include="qimd_client.cpp" />
     <ClCompile Include="qimd_server.cpp" />
+    <ClCompile Include="Utils.cpp" />
     <ClCompile Include="winsocket_init.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,8 +162,11 @@
     <ClInclude Include="Packet.h" />
     <ClInclude Include="ParseInput.h" />
     <ClInclude Include="ProgramFlags.h" />
+    <ClInclude Include="QIMDColumn.h" />
+    <ClInclude Include="QIMDTable.h" />
     <ClInclude Include="qimd_client.h" />
     <ClInclude Include="qimd_server.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="winsocket_init.h" />
   </ItemGroup>
   <ItemGroup>
